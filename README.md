@@ -29,10 +29,10 @@ as TECNOLOGIAS usadas foram:
 --------------------------------------------------------------
 Lista de tarefas:
 ## Backend
-- [ ] Criar conexão com banco de dados
-- [ ] Criar Arquitetura MVC
-- [ ] Inicializar app com index.js
-- [ ] Criar Rotas e Controles
+- [x] Criar conexão com banco de dados
+- [x] Criar Arquitetura MVC
+- [x] Inicializar app com index.js
+- [x] Criar Rotas e Controles
 - [ ] Fazer validações de usuário
 - [ ] Criar sistema de autenticação por tokens
 - [ ] Criar Login e verificação por token
