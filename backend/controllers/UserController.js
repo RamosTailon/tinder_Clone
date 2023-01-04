@@ -5,9 +5,9 @@ const bcrypt = require('bcrypt') // criptografa a senha e gera um token
 
 const jwt = require('jsonwebtoken') // lê o token
 
-const createUserToken = require('../helpers/create-user-token')
-
 //HELPERS
+const createUserToken = require('../helpers/create-user-token')
+const getToken = require('../helpers/get-token')
 
 //START CLASS
 module.exports = class UserController {
@@ -139,5 +139,23 @@ module.exports = class UserController {
 		}
 
 		await createUserToken(user, req, res)
+	}
+
+	static async checkUser(req, res) {
+		let currentUser;
+		// console.log(req.headers.authorization)
+
+		if (req.headers.authorization) {
+
+			const token = getToken((req))
+			const decoded = jwt.verify(token, 'SUPERSENHA')
+
+			currentUser = await User.findById(decoded.id)
+			currentUser.password = undefined
+		} else {
+			currentUser = null
+		}
+
+		res.status(200).send(currentUser)
 	}
 }
