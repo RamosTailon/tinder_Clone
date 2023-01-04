@@ -33,10 +33,10 @@ Lista de tarefas:
 - [x] Criar Arquitetura MVC
 - [x] Inicializar app com index.js
 - [x] Criar Rotas e Controles
-- [ ] Fazer validações de usuário
-- [ ] Criar sistema de autenticação por tokens
-- [ ] Criar Login e verificação por token
-- [ ] Criar sistema de uploads de imagens
+- [x] Fazer validações de usuário
+- [x] Criar sistema de autenticação por tokens
+- [x] Criar Login e verificação por token
+- [x] Criar sistema de uploads de imagens
 - [ ] Criar regras de negócio da troca de telefone por Match
 
 ## Frontend

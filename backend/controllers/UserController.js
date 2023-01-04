@@ -179,7 +179,8 @@ module.exports = class UserController {
 		const token = getToken(req)
 		const user = await getUserByToken(token)
 
-		const { name, email, password, confirmpassword, age, phone, images, bio, city, nation, interest } = req.body
+		const { name, email, password, confirmpassword, age, phone, bio, city, nation, interest } = req.body
+		const images = req.files
 
 		//VALIDAÇÕES
 		//---------------
@@ -225,11 +226,15 @@ module.exports = class UserController {
 		}
 		user.phone = phone
 		//+++++++++++++++++++++++++++++++
-		if (!images) {
+
+		if (images.length == 0) {
 			res.status(422).json({ message: "As fotos são obrigatórias" })
 			return
 		}
-		user.images = images
+
+		images.map((image) => {
+			user.images.push(image.filename)
+		})
 		//---------------
 		if (!bio) {
 			res.status(422).json({ message: "A descrição é obrigatória" })
