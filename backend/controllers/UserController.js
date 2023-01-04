@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken') // lê o token
 //HELPERS
 const createUserToken = require('../helpers/create-user-token')
 const getToken = require('../helpers/get-token')
+const getUserByToken = require('../helpers/get-user-by-token')
 
 //START CLASS
 module.exports = class UserController {
@@ -157,5 +158,111 @@ module.exports = class UserController {
 		}
 
 		res.status(200).send(currentUser)
+	}
+
+	static async getUserById(req, res) {
+		const id = req.params.id
+		//.select() ELIMINA ALGUNS CAMPOS NA HORA DO QUERY
+		const user = await User.findById(id).select("-password")
+
+		if (!user) {
+			res.status(422).json({ message: "Usuário não encontrado!" })
+			return
+		}
+		res.status(200).json({ user })
+	}
+
+	static async editUser(req, res) {
+		const id = req.params.id
+
+		//VERIFICAR SE O USUÁRIO EXISTE
+		const token = getToken(req)
+		const user = await getUserByToken(token)
+
+		const { name, email, password, confirmpassword, age, phone, images, bio, city, nation, interest } = req.body
+
+		//VALIDAÇÕES
+		//---------------
+		if (!name) {
+			res.status(422).json({ message: "O nome é obrigatório" })
+			return
+		}
+		user.name = name
+		//---------------
+		if (!email) {
+			res.status(422).json({ message: "O e-mail é obrigatório" })
+			return
+		}
+
+		//VERIFICANDO SE O USUÁRIO EXISTE
+		const userExists = await User.findOne({ email: email })
+		if (user.email !== email && userExists) {
+			res.status(422).json({ message: "Email já cadastrado, por favor use outro!" })
+			return
+		}
+		user.email = email
+		//---------------
+		if (password != confirmpassword) {
+			res.status(422).json({ message: "As senhas não conferem!" })
+			return
+		} else if (password === confirmpassword && password != null) {
+			//CRIAR A SENHA PARA ATUALIZA-LA
+			const salt = await bcrypt.genSalt(12)
+			const passwordHash = await bcrypt.hash(password, salt) // SUPER SENHA
+
+			user.password = passwordHash
+		}
+		//---------------
+		if (!age) {
+			res.status(422).json({ message: "A idade é obrigatória" })
+			return
+		}
+		user.age = age
+		//---------------
+		if (!phone) {
+			res.status(422).json({ message: "O telefone é obrigatório" })
+			return
+		}
+		user.phone = phone
+		//+++++++++++++++++++++++++++++++
+		if (!images) {
+			res.status(422).json({ message: "As fotos são obrigatórias" })
+			return
+		}
+		user.images = images
+		//---------------
+		if (!bio) {
+			res.status(422).json({ message: "A descrição é obrigatória" })
+			return
+		}
+		user.bio = bio
+		//---------------
+		if (!city) {
+			res.status(422).json({ message: "A cidade é obrigatória" })
+			return
+		}
+		user.city = city
+		//---------------
+		if (!nation) {
+			res.status(422).json({ message: "O Estado é obrigatório" })
+			return
+		}
+		user.nation = nation
+
+		user.interest = interest
+		//++++++++++++++++++++++++++
+		try {
+			//RETORNA OS DADOS ATUALIZADOS DO USUÁRIO
+			await User.findOneAndUpdate(
+				{ _id: user._id },//filtro id
+				{ $set: user }, //o dado que será atualizado
+				{ new: true }
+			)
+			res.status(200).json({ message: "Usuário atualizado com sucesso!" })
+		} catch (err) {
+			res.status(500).json(err)
+			return
+		}
+
 	}
 }
