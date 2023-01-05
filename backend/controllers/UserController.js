@@ -285,12 +285,41 @@ module.exports = class UserController {
 			return
 		}
 
-		user.delivered = id
+		//NÃO PODE FAZER DELIVERED 2 VEZES NA MESMA PESSOA
+		if (user.delivered.includes(id)) {
+			res.status(422).json({
+				message: 'Você já deu Match neste usuário!',
+			})
+			return
+		}
+
+
+
+		user.delivered.push(id)
 
 		const anotherUser = await User.findById(id)
 		anotherUser.received = user.id
 
-		//console.log(anotherUser)
+		//ADICIONA O OUTRO USUÁRIO NO MATCH
+
+		user.match.push({
+			id: id,
+			image: anotherUser.images[0],
+			name: anotherUser.name,
+			status: "aguardando",
+			phone: anotherUser.phone
+		})
+		//AGUARDANDO, PENDENTE, ACEITO, RECUSADO
+
+		anotherUser.match.push({
+			id: user._id,
+			image: user.images[0],
+			name: user.name,
+			status: "pendente",
+			phone: user.phone
+
+		})
+
 
 		try {
 			await User.findOneAndUpdate(
@@ -322,8 +351,7 @@ module.exports = class UserController {
 		//lógica de verificação se as listas batem
 
 		//CRIAR OBJETO DO USER
-		//User.match = {id, name,phone}
-
+		//Model.match.status
 
 
 

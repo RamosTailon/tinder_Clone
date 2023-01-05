@@ -37,7 +37,8 @@ Lista de tarefas:
 - [x] Criar sistema de autenticação por tokens
 - [x] Criar Login e verificação por token
 - [x] Criar sistema de uploads de imagens
-- [ ] Criar regras de negócio da troca de telefone por Match
+- [x] Criar regras de negócio da troca de telefone por Match
+- [ ] Validação final de status do Match
 
 ## Frontend
 - [ ] Criar arquiteturas e rotas
