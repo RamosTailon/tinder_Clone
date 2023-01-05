@@ -50,7 +50,13 @@ const User = mongoose.model(
         received: {
             type: Array
         },
-        Match: Object,
+        match: {
+            type: Array
+        },
+        /*
+        User.match = [{id:1d2xg, name:"Bia",phone:123456},{id:w1s5, name:"Flávia",phone:178945},]
+        array de tamanho 2
+        */
     }, { timestamps: true })
 )
 

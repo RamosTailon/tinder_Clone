@@ -272,19 +272,37 @@ module.exports = class UserController {
 
 	}
 
-	static async deliveredId(req, res) {
+	static async swapMatch(req, res) {
 		const id = req.params.id
 
 		//VERIFICAR SE O USUÁRIO EXISTE
 		const token = getToken(req)
 		const user = await getUserByToken(token)
 
-		user.delivered = user.id
+		//VALIDATION
+		if (id.toString() == (user._id.toString())) {
+			res.status(422).json({
+				message: 'Você pode dar Match em si mesmo!',
+			})
+			return
+		}
+
+		user.delivered = id
+
+		const anotherUser = await User.findById(id)
+		anotherUser.received = user.id
+
+		//console.log(anotherUser)
 
 		try {
 			await User.findOneAndUpdate(
 				{ _id: user._id },//filtro id
 				{ $set: user }, //o dado que será atualizado
+				{ new: true }
+			)
+			await User.findOneAndUpdate(
+				{ _id: anotherUser._id },//filtro id
+				{ $set: anotherUser }, //o dado que será atualizado
 				{ new: true }
 			)
 
@@ -295,16 +313,24 @@ module.exports = class UserController {
 			return
 
 		}
+	}
+
+	static async matchList(req, res) {
+
+		//VERIFICAR SE O USUÁRIO EXISTE
+		const token = getToken(req)
+		const user = await getUserByToken(token)
+
+		//lógica de verificação se as listas batem
+
+		//CRIAR OBJETO DO USER
+		//User.match = {id, name,phone}
 
 
 
 
-		//******************************* */
-		delivered = [idJoaozinho, idMaria, idJoana]
 
-		received = [idPaulo, idBeatriz, idMaria, idJoana]
 
-		match = [{ _id: Maria, phone: 123456 }, { _id: Joana, phone: 124578 }]
 
 	}
 }
