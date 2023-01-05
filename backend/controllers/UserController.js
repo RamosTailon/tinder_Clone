@@ -19,6 +19,7 @@ module.exports = class UserController {
 			res.status(422).json({ message: "O nome é obrigatório!" })
 			return
 		}
+
 		if (!email) {
 			res.status(422).json({ message: "O e-mail é obrigatório" })
 			return
@@ -268,6 +269,42 @@ module.exports = class UserController {
 			res.status(500).json(err)
 			return
 		}
+
+	}
+
+	static async deliveredId(req, res) {
+		const id = req.params.id
+
+		//VERIFICAR SE O USUÁRIO EXISTE
+		const token = getToken(req)
+		const user = await getUserByToken(token)
+
+		user.delivered = user.id
+
+		try {
+			await User.findOneAndUpdate(
+				{ _id: user._id },//filtro id
+				{ $set: user }, //o dado que será atualizado
+				{ new: true }
+			)
+
+			res.status(200).json({ message: "Você deu Match!" })
+		} catch (err) {
+
+			res.status(500).json(err)
+			return
+
+		}
+
+
+
+
+		//******************************* */
+		delivered = [idJoaozinho, idMaria, idJoana]
+
+		received = [idPaulo, idBeatriz, idMaria, idJoana]
+
+		match = [{ _id: Maria, phone: 123456 }, { _id: Joana, phone: 124578 }]
 
 	}
 }

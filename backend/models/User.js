@@ -44,10 +44,13 @@ const User = mongoose.model(
         interest: { //interesse da pessoa no sexo...
             type: String
         },
-        match: Object,
-        phoneAvailable: {
+        delivered: {
             type: Array
         },
+        received: {
+            type: Array
+        },
+        Match: Object,
     }, { timestamps: true })
 )
 

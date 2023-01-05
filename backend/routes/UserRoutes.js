@@ -13,4 +13,7 @@ router.get('/:id', UserController.getUserById)
 //ROTA PROTEGIDA POR TOKEN
 router.patch('/edit/:id', verifyToken, imageUpload.array('images'), UserController.editUser)
 
+//ROTA DE MATCH
+router.post('/delivered',verifyToken,UserController.deliveredId)
+
 module.exports = router
