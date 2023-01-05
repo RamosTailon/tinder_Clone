@@ -42,6 +42,7 @@ module.exports = class UserController {
 			res.status(422).json({ message: "A idade é obrigatória" })
 			return
 		}
+
 		if (!phone) {
 			res.status(422).json({ message: "O telefone é obrigatório" })
 			return
@@ -50,6 +51,7 @@ module.exports = class UserController {
 			res.status(422).json({ message: "Você deve adicionar ao menos uma foto" })
 			return
 		}
+
 		if (!bio) {
 			res.status(422).json({ message: "Você deve adicionar uma descrição na bio" })
 			return
@@ -93,11 +95,7 @@ module.exports = class UserController {
 		try {
 			//.save MÉTODO DO MONGOOSE
 			const newUser = await user.save()
-			/*res.status(201).json({
-				 message: "usuário criado!",
-				 newUser
-			})*/
-
+			//res.status(201).json({ message: "usuário criado!", newUser })
 			await createUserToken(newUser, req, res)
 
 
