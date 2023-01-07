@@ -360,7 +360,6 @@ module.exports = class UserController {
 
 		}
 	}
-
 	static async getAll(req, res) {
 
 		const allUsers = await User.find().sort('-createdAt')
@@ -370,4 +369,35 @@ module.exports = class UserController {
 		})
 
 	}
+
+	static async getLoves(req, res) {
+
+		//VERIFICAR SE O USUÁRIO EXISTE
+		const token = getToken(req)
+		const user = await getUserByToken(token)
+
+		const matchList = await User.find(user._id)
+
+		const listDelivered = matchList[0].delivered
+		res.status(200).json({
+			myMatch: listDelivered
+		})
+	}
+
+	static async getCrush(req, res) {
+
+		//VERIFICAR SE O USUÁRIO EXISTE
+		const token = getToken(req)
+		const user = await getUserByToken(token)
+
+		const matchList = await User.find(user._id)
+
+		const listReceived = matchList[0].received
+
+		res.status(200).json({
+			myCrush: listReceived
+		})
+	}
+
+	
 }
