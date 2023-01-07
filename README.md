@@ -22,9 +22,12 @@ as TECNOLOGIAS usadas foram:
 
 ## Frontend
 * **React.js**
-* React Router V6
+* react-router-dom (React Router V6)
 * yarn(vite)
 * styled-components //css escopado
+* axios
+* events
+* react-icons
 
 --------------------------------------------------------------
 Lista de tarefas:

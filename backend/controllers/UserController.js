@@ -290,7 +290,7 @@ module.exports = class UserController {
 
 		if (user.delivered.some((item) => item.id == id)) {
 			res.status(422).json({
-				message: 'Você já deu match nessa pessoa!',
+				message: 'Você já deu gostei nessa pessoa!',
 			})
 			return
 		}
@@ -354,7 +354,7 @@ module.exports = class UserController {
 			)
 
 
-			res.status(200).json({ message: "Você deu Match!" })
+			res.status(200).json({ message: `Você gostou de ${anotherUser.name}` })
 		} catch (err) {
 
 			res.status(500).json(err)
@@ -427,8 +427,28 @@ module.exports = class UserController {
 			user.received[userList]['reject'] = true
 		}
 
-		console.log(user)
-		console.log(anotherUser)
+
+		try {
+
+			await User.findOneAndUpdate(
+				{ _id: user._id },//filtro id
+				{ $set: user }, //o dado que será atualizado
+				{ new: true }
+			)
+			await User.findOneAndUpdate(
+				{ _id: anotherUser._id },//filtro id
+				{ $set: anotherUser }, //o dado que será atualizado
+				{ new: true }
+			)
+
+
+			res.status(200).json({ message: `Rejeitou ${anotherUser.name}` })
+		} catch (err) {
+
+			res.status(500).json(err)
+			return
+
+		}
 
 
 	}
