@@ -309,7 +309,7 @@ module.exports = class UserController {
 
 		const list = anotherUser.delivered.findIndex((item) => item.id.toString() == user._id.toString())
 
-		if(anotherUser.delivered?.[0]){
+		if (anotherUser.delivered?.[0]) {
 			if (Object.keys(anotherUser.delivered[0]).includes('status')) {
 				anotherUser.delivered[list]['status'] = true
 			}
