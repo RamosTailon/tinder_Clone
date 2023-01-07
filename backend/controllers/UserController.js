@@ -361,21 +361,13 @@ module.exports = class UserController {
 		}
 	}
 
-	static async matchList(req, res) {
+	static async getAll(req, res) {
 
-		//VERIFICAR SE O USUÁRIO EXISTE
-		const token = getToken(req)
-		const user = await getUserByToken(token)
+		const allUsers = await User.find().sort('-createdAt')
 
-		//lógica de verificação se as listas batem
-
-		//CRIAR OBJETO DO USER
-		//Model.match.status
-
-
-
-
-
+		res.status(200).json({
+			users: allUsers
+		})
 
 	}
 }
