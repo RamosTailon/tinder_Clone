@@ -270,7 +270,7 @@ module.exports = class UserController {
 
 	}
 
-	static async swapMatch(req, res) {
+	static async liked(req, res) {
 		const id = req.params.id
 
 		//VERIFICAR SE O USUÁRIO EXISTE
@@ -280,48 +280,66 @@ module.exports = class UserController {
 		//VALIDATION
 		if (id.toString() == (user._id.toString())) {
 			res.status(422).json({
-				message: 'Você pode dar Match em si mesmo!',
+				message: 'Você não pode dar Match em si mesmo!',
 			})
 			return
 		}
+
 
 		//NÃO PODE FAZER DELIVERED 2 VEZES NA MESMA PESSOA
-		if (user.delivered.includes(id)) {
+
+		if (user.delivered.some((item) => item.id == id)) {
 			res.status(422).json({
-				message: 'Você já deu Match neste usuário!',
+				message: 'Você já deu match nessa pessoa!',
 			})
 			return
 		}
 
 
-
-		user.delivered.push(id)
-
 		const anotherUser = await User.findById(id)
-		anotherUser.received = user.id
 
-		//ADICIONA O OUTRO USUÁRIO NO MATCH
+		//verificação para ver se já não recebeu match
 
-		user.match.push({
-			id: id,
-			image: anotherUser.images[0],
-			name: anotherUser.name,
-			status: "aguardando",
-			phone: anotherUser.phone
+		let condition = false
+		user.received.map((item) => {
+			if (item.id == id) {
+				condition = true
+			}
 		})
-		//AGUARDANDO, PENDENTE, ACEITO, RECUSADO
 
-		anotherUser.match.push({
-			id: user._id,
-			image: user.images[0],
-			name: user.name,
-			status: "pendente",
-			phone: user.phone
+		const list = anotherUser.delivered.findIndex((item) => item.id.toString() == user._id.toString())
 
-		})
+		if(anotherUser.delivered?.[0]){
+			if (Object.keys(anotherUser.delivered[0]).includes('status')) {
+				anotherUser.delivered[list]['status'] = true
+			}
+		}
+
+
+		user.delivered.push(
+			{
+				id: anotherUser._id,
+				image: anotherUser.images[0],
+				name: anotherUser.name,
+				phone: anotherUser.phone,
+				...(condition ? { status: true } : { status: false })
+			}
+		)
+
+
+		anotherUser.received.push(
+			{
+				id: user._id,
+				image: user.images[0],
+				name: user.name,
+				phone: user.phone
+			}
+		)
+
 
 
 		try {
+
 			await User.findOneAndUpdate(
 				{ _id: user._id },//filtro id
 				{ $set: user }, //o dado que será atualizado
@@ -332,6 +350,7 @@ module.exports = class UserController {
 				{ $set: anotherUser }, //o dado que será atualizado
 				{ new: true }
 			)
+
 
 			res.status(200).json({ message: "Você deu Match!" })
 		} catch (err) {

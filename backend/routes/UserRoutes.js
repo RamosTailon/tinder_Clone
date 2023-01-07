@@ -14,8 +14,8 @@ router.get('/:id', UserController.getUserById)
 router.patch('/edit/:id', verifyToken, imageUpload.array('images'), UserController.editUser)
 
 //ROTA DE MATCH
-router.patch('/swapMatch/:id', verifyToken, UserController.swapMatch)
-router.post('/match', UserController.matchList) //ADICIONAR NA LISTA DE USUARIOS
+router.patch('/liked/:id', verifyToken, UserController.liked)
+router.post('/matchlist', UserController.matchList) //ADICIONAR NA LISTA DE USUARIOS
 //RETORNAR OS MATCHS
 
 module.exports = router
