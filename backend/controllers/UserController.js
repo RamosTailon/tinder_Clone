@@ -307,6 +307,7 @@ module.exports = class UserController {
 			}
 		})
 
+		//VERIFICAR A POSIÇÃO DO USUÁRIO NA LISTA
 		const list = anotherUser.delivered.findIndex((item) => item.id.toString() == user._id.toString())
 
 		if (anotherUser.delivered?.[0]) {
@@ -322,7 +323,8 @@ module.exports = class UserController {
 				image: anotherUser.images[0],
 				name: anotherUser.name,
 				phone: anotherUser.phone,
-				...(condition ? { status: true } : { status: false })
+				...(condition ? { status: true } : { status: false }),
+				iWasReject: false
 			}
 		)
 
@@ -332,7 +334,7 @@ module.exports = class UserController {
 				id: user._id,
 				image: user.images[0],
 				name: user.name,
-				phone: user.phone
+				reject: false
 			}
 		)
 
@@ -360,6 +362,7 @@ module.exports = class UserController {
 
 		}
 	}
+
 	static async getAll(req, res) {
 
 		const allUsers = await User.find().sort('-createdAt')
@@ -399,5 +402,35 @@ module.exports = class UserController {
 		})
 	}
 
-	
+	static async rejectUser(req, res) {
+		const id = req.params.id
+
+		//VERIFICAR SE O USUÁRIO EXISTE
+		const token = getToken(req)
+		const user = await getUserByToken(token)
+
+		const anotherUser = await User.findById(id)
+
+		//VERIFICAR A POSIÇÃO DO USUÁRIO NA LISTA
+		const anotherList = anotherUser.delivered.findIndex((item) => item.id.toString() == user._id.toString())
+
+		if (anotherUser.delivered?.[0]) {
+			if (Object.keys(anotherUser.delivered[0]).includes('status')) {
+				anotherUser.delivered[anotherList]['iWasReject'] = true
+			}
+		}
+
+		const userList = user.received.findIndex((item) => item.id.toString() == anotherUser.id)
+
+
+		if (user.received?.[0]) {
+			user.received[userList]['reject'] = true
+		}
+
+		console.log(user)
+		console.log(anotherUser)
+
+
+	}
+
 }

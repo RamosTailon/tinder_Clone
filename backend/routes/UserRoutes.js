@@ -16,10 +16,13 @@ router.patch('/edit/:id', verifyToken, imageUpload.array('images'), UserControll
 //ROTA DE MATCH
 router.patch('/liked/:id', verifyToken, UserController.liked)
 
-//RETORNAR OS TODOS USUÁRIOS
+//RETORNAR USUÁRIOS
 router.get('/', UserController.getAll)
 router.get('/match/loves', verifyToken, UserController.getLoves)
 router.get('/match/crush', verifyToken, UserController.getCrush)
+
+//ROTA DE MATCH
+router.patch('/reject/:id', verifyToken, UserController.rejectUser)
 
 
 module.exports = router
