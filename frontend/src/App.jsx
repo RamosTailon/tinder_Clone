@@ -5,6 +5,7 @@ import './App.css'
 //COMPONENTS
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import Container from './components/Container'
 
 //PAGES
 import Home from './pages/Home';
@@ -18,13 +19,13 @@ function App() {
 		<div className="App">
 			<BrowserRouter>
 				<Navbar />
-				<div className="container">
+				<Container>
 					<Routes>
-						<Route path='/' element={<Home />} />
 						<Route path='/login' element={<Login />} />
 						<Route path='/register' element={<Register />} />
+						<Route path='/' element={<Home />} />
 					</Routes>
-				</div>
+				</Container>
 				<Footer />
 			</BrowserRouter>
 		</div>
