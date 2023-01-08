@@ -7,7 +7,8 @@ const app = express()
 app.use(express.json())
 
 app.use(cors({
-    credentials: true, origin: 'http://localhost:3000'  //3000 PARA A PORTA DO REACT.JS 
+    //5173 PARA A PORTA DO REACT.JS USANDO O YARN VITE
+    credentials: true, origin: 'http://localhost:5173'
 }))
 
 //Pasta de pública imagens
