@@ -47,10 +47,19 @@ module.exports = class UserController {
 			res.status(422).json({ message: "O telefone é obrigatório" })
 			return
 		}
+
+		/************** */
 		if (!images) {
 			res.status(422).json({ message: "Você deve adicionar ao menos uma foto" })
 			return
 		}
+
+		let imageList = []
+		images.map((image) => {
+			imageList.push(image.filename)
+		})
+
+		/************** */
 
 		if (!bio) {
 			res.status(422).json({ message: "Você deve adicionar uma descrição na bio" })
@@ -85,7 +94,7 @@ module.exports = class UserController {
 			password: passwordHash,
 			phone: phone,
 			age: age,
-			images: images,
+			images: imageList,
 			bio: bio,
 			city: city,
 			nation: nation,
@@ -179,7 +188,6 @@ module.exports = class UserController {
 		const user = await getUserByToken(token)
 
 		const { name, email, password, confirmpassword, age, phone, bio, city, nation, interest } = req.body
-		const images = req.files
 
 		//VALIDAÇÕES
 		//---------------
@@ -226,14 +234,24 @@ module.exports = class UserController {
 		user.phone = phone
 		//+++++++++++++++++++++++++++++++
 
-		if (images.length == 0) {
-			res.status(422).json({ message: "As fotos são obrigatórias" })
-			return
-		}
 
+		const updateData = {}
+		let images = req.files
+		if (images <= 0) {
+			res.status(422).json({ message: 'A imagem é obrigatória!' })
+			return
+		} else {
+			updateData.images = []
+			images.map((image) => {
+				updateData.images.push(image.filename)
+			})
+		}
+		let imageList = []
 		images.map((image) => {
-			user.images.push(image.filename)
+			imageList.push(image.filename)
 		})
+		user.images = imageList
+
 		//---------------
 		if (!bio) {
 			res.status(422).json({ message: "A descrição é obrigatória" })

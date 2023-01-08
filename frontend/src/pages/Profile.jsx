@@ -1,7 +1,7 @@
 //HOOKS
 import { useState, useEffect } from 'react';
 import useFlashMessage from '../hooks/useFlashMessage'
-
+import { useParams } from 'react-router-dom';
 //UTILS
 import api from '../utils/api'
 
@@ -14,17 +14,20 @@ import Input from '../components/form/Input'
 
 const Profile = () => {
 
+    const { id } = useParams()
+
     const [user, setUser] = useState({});
     const [preview, setPreview] = useState([]);
     const [token] = useState(localStorage.getItem('token') || '')
     const { setFlashMessage } = useFlashMessage()
 
     function onFileChange(e) {
-        setPreview(Array.from(e.target.files)) //file list é transformado em array
-        const test = Array.from(e.target.files).map((im) => { return im.name })
-        setUser({
-            ...user, images: ...test
-        })
+        //file list é transformado em array
+        // setUser({ ...user, images: [...e.target.files] })
+        setPreview(e.target.files)
+        //const setImageUser = Array.from(e.target.files).map((im) => { return im.name })
+        setUser({ ...user, images: [...e.target.files] })
+        console.log([...e.target.files])
     }
 
     // Array.from(e.target.files).map((im) => { return im.name })
@@ -38,27 +41,44 @@ const Profile = () => {
 
         let msgType = 'success'
 
-        const formData = new FormData();
-        await Object.keys(user).forEach((key) => formData.append(key, user[key]))
+        const formData = new FormData()
 
-        //API DE EDIÇÃO DE DADOS
-        const data = await api.patch(`/users/edit/${user._id}`, formData, {
-            headers: {
-                Authorization: `Bearer ${JSON.parse(token)}`,
-                'Content-Type': 'multipart/form-data'
+        // const userFormData = await Object.keys(user).forEach((key) =>
+        //     formData.append(key, user[key]),)
+
+        const userFormData = await Object.keys(user).forEach((key) => {
+            if (key === 'images') {
+                for (let i = 0; i < user[key].length; i++) {
+                    formData.append(`images`, user[key][i])
+                }
+            } else {
+                formData.append(key, user[key])
             }
-        }).then((response) => {
-
-            return response.data
-
-        }).catch((err) => {
-            msgType = 'error'
-            return err.response.data
         })
+
+        formData.append('user', userFormData)
+        console.log(formData)
+
+        const data = await api
+            .patch(`/users/edit/${user._id}`, formData, {
+                headers: {
+                    Authorization: `Bearer ${JSON.parse(token)}`,
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            .then((response) => {
+                console.log(response.data)
+                return response.data
+            })
+            .catch((err) => {
+                console.log(err)
+                msgType = 'error'
+                return err.response.data
+            })
 
         setFlashMessage(data.message, msgType)
 
-        console.log(user.images)
+
     }
 
     useEffect(() => {
