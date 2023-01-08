@@ -1,0 +1,22 @@
+textarea {
+    width: 95%;
+    height: 6em;
+    padding: 0.7em;
+    border: 1px solid #777;
+    border-radius: 5px;
+    font-family: sans-serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+textarea::placeholder {
+    color: #7b7b7b;
+    font-family: poppins;
+}
+
+.textLabel {
+    margin-bottom: 0.3em;
+    font-weight: bold;
+    font-size: 0.8em;
+}

@@ -21,7 +21,7 @@ const Navbar = () => {
                 {authenticated ? (
                     <>
                         <p>Fulana de tal</p>
-                        <Link to='/edit' className={style.image}></Link>
+                        <Link to='/user/profile' className={style.image}></Link>
                         <br />
                         <p id={style.sair} onClick={logout}>Sair</p>
                     </>

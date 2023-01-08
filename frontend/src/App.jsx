@@ -14,6 +14,7 @@ import Message from './layouts/Message'
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Profile from './pages/Profile';
 
 //CONTEXTS
 import { UserProvider } from './context/UserContext';
@@ -30,6 +31,7 @@ function App() {
 						<Routes>
 							<Route path='/login' element={<Login />} />
 							<Route path='/register' element={<Register />} />
+							<Route path='/user/profile' element={<Profile />} />
 							<Route path='/' element={<Home />} />
 						</Routes>
 					</Container>
