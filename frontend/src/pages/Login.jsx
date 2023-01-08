@@ -9,13 +9,14 @@ import { useState, useContext } from 'react'
 //COMPONENTS
 import Input from '../components/form/Input'
 
-
+//CONTEXT
+import { Context } from '../context/UserContext'
 
 const Login = () => {
 
     const [user, setUser] = useState({})
 
-    // const { login } = useContext(Context)
+    const { login } = useContext(Context)
 
     function handleChange(e) {
         setUser({ ...user, [e.target.name]: e.target.value })
@@ -23,7 +24,7 @@ const Login = () => {
 
     function handleSubmit(e) {
         e.preventDefault()
-        // login(user)
+        login(user)
     }
 
     return (

@@ -28,12 +28,35 @@
     font-size: clamp(8px, 5vw, 25px);
 }
 
+#sair {
+    margin-left: 12px;
+    opacity: 0.85;
+    cursor: pointer;
+    font-size: 0.8em;
+}
+
+.profile .log {
+    margin-right: 0.4em;
+    text-decoration: none;
+    color: #fff;
+    background-color: #942476;
+    padding: 3px 12px;
+    font-size: 0.85em;
+    border-radius: 7px;
+    outline: none;
+    transition: .4s;
+}
+
+.profile .log:hover {
+    background-color: #B54597;
+}
+
 .image {
     width: clamp(1rem, 2.8rem, 3.3rem);
     height: clamp(1rem, 2.8rem, 3.3rem);
     border: 2px solid #fff;
     border-radius: 50%;
     background-color: rgb(15, 51, 194);
-    margin-left: 1.3em;
+    margin-left: 0.7em;
     cursor: pointer;
 }
